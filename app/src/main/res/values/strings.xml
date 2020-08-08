@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Soko</string>
+    <string name="api_error_repos">Error Loading Product Items</string>
+    <string name="screen_title_trending">Products</string>
+    <string name="retry">Retry</string>
+    <string name="search_title">SEARCH SHOPPER</string>
+    <string name="title">Title</string>
+    <string name="product_description">Description</string>
+    <string name="app_label">Shopper</string>
+    <string name="search_hint">Search Store</string>
+    <string name="error_message">"Product Unavailable. "</string>
+</resources>

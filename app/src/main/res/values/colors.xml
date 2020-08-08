@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FBB8AC</color>
+    <color name="colorAccent">#FBB8AC</color>
+    <color name="colorTitle">#AF6E4E</color>
+    <color name="textInputOutlineColor">#FEDBD0</color>
+    <color name="textColorPrimary">#442C2E</color>
+    <color name="productGridBackgroundColor">#FEF9F9</color>
+</resources>
