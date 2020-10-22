@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<item
+    android:id="@+id/sign_out"
+    android:title="@string/log_out"
+    android:fontFamily="@font/gabriela_regular"
+    android:textColor="@color/textColorPrimary">
+</item>
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_search_logo"
-        android:title="@string/search_title"
-        app:actionViewClass = "android.widget.SearchView"
-        app:showAsAction="always" />
+        android:id="@+id/change_timetable"
+        android:title="@string/change_timetable"
+        android:fontFamily="@font/gabriela_regular"
+        android:textColor="@color/textColorPrimary">
+    </item>
+
 </menu>

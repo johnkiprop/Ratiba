@@ -22,4 +22,8 @@
         app:fontStyle="normal"
         app:fontWeight="700"
         app:font="@font/lithos_pro_regular"/>
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="700"
+        app:font="@font/constantia"/>
 </font-family>
