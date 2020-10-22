@@ -2,16 +2,17 @@ Ratiba - Timetable Scheduler App
 ============
 [![GitHub Stars](https://img.shields.io/github/stars/JohnKiprop/ratiba.svg)](https://github.com/JohnKiprop/Ratiba/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/JohnKiprop/ratiba.svg)](https://github.com/JohnKiprop/Ratiba/issues) [![Current Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/JohnKiprop/Ratiba)
 
- Ratiba leverages the power of Dagger 2, modern android technologies and Google Calendar API to deliver efficient high-quality scheduling services to high-school teachers. 
+ Ratiba leverages the power of Dagger 2, modern android technologies and Google Calendar API to deliver high-quality scheduling services to high-school teachers. 
 
-![Schedule Preview](blob:https://www.pinterest.com/01f06b6a-c9d2-4ae5-8e24-639cff36523e)
+![Schedule Preview]
+
+Go [here](blob:https://www.pinterest.com/01f06b6a-c9d2-4ae5-8e24-639cff36523e)
 
 ---
 ## To View More Screens from App
 
-If interested in seeing more displays from the app. Go to :
+If interested in seeing more displays from the app. Go [here](https://www.pinterest.com/jkiprop0705/ratiba/)
 
-<a href="https://www.pinterest.com/jkiprop0705/ratiba/" target="_blank"></a>
 
 ---
 ## Features
