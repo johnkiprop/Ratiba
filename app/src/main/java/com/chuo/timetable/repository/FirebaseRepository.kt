@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class FirebaseRepository
- @Inject constructor(@IODispatcher private val dispatcher: CoroutineDispatcher){
+@Inject constructor(@IODispatcher private val dispatcher: CoroutineDispatcher){
 
     val auth = FirebaseAuth.getInstance()
     val firestore = Firebase.firestore

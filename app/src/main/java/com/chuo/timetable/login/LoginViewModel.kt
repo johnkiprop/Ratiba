@@ -4,6 +4,7 @@ import android.util.Patterns
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.chuo.timetable.base.BaseViewModel
+import com.chuo.timetable.model.Teacher
 import com.chuo.timetable.repository.FirebaseRepository
 import com.chuo.timetable.ui.ScreenNavigator
 import com.chuo.timetable.viewmodel.AssistedSavedStateViewModelFactory
@@ -15,6 +16,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -37,6 +39,24 @@ constructor(firebaseRepository: FirebaseRepository,
     }
     fun handleChangePass(email: String){
         changePassword(email)
+    }
+    fun teacherList(){
+        observeTeacherList()
+    }
+    private  fun observeTeacherList(){
+        viewModelScope.launch {
+            firebaseRepository.observeTutors().collect { result: Result<List<Teacher>?>->
+                when{
+                    result.isSuccess ->{
+                        viewState.teachersLiveData = firebaseRepository.observeTeacherLiveData
+                        updateUi()
+                    }
+                    result.isFailure ->{
+                        Timber.e(result.exceptionOrNull()?.message!!)
+                    }
+                }
+            }
+        }
     }
 
     private fun changePassword(email: String){

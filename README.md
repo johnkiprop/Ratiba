@@ -4,12 +4,8 @@ Ratiba - Timetable Scheduler App
 
  Ratiba leverages the power of Dagger 2, modern android technologies and Google Calendar API to deliver high-quality scheduling services to high-school teachers. 
 
-![Schedule Preview]
-
-Go [here](blob:https://www.pinterest.com/01f06b6a-c9d2-4ae5-8e24-639cff36523e)
-
 ---
-## To View More Screens from App
+## To View Screens from App
 
 If interested in seeing more displays from the app. Go [here](https://www.pinterest.com/jkiprop0705/ratiba/)
 

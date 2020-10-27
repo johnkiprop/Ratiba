@@ -10,12 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.chuo.timetable.R
 import com.chuo.timetable.base.BaseFragment
 import com.chuo.timetable.databinding.LoginScreenBinding
-import com.chuo.timetable.di.ScreenScope
+
 import com.chuo.timetable.viewmodel.InjectingSavedStateViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 import javax.inject.Inject
+import androidx.lifecycle.Observer
+import com.chuo.timetable.model.Teacher
 
 @ExperimentalCoroutinesApi
 class LoginFragment : BaseFragment<LoginViewModel,LoginViewState, LoginScreenBinding>(){
@@ -39,6 +41,7 @@ class LoginFragment : BaseFragment<LoginViewModel,LoginViewState, LoginScreenBin
        }
     }
     override fun onViewBound(view: View) {
+        viewModel.teacherList()
     binding?.button2?.setOnClickListener {
         viewModel.handleSubmitButtonClicked(
             binding?.textInputLayoutLoginEmail?.editText?.text.toString(),
@@ -55,8 +58,14 @@ class LoginFragment : BaseFragment<LoginViewModel,LoginViewState, LoginScreenBin
             )
         }
     }
-
+    private fun setTeacherCheck(teachers:List<Teacher>){
+        if (teachers.size == 3){ binding?.textViewGoToCreateAc?.visibility = View.GONE}
+        else {binding?.textViewGoToCreateAc?.visibility = View.VISIBLE }
+    }
      override fun updateUi(state: LoginViewState) {
+         state.teachersLiveData?.observe(this, Observer {
+             setTeacherCheck(it)
+         })
          binding?.button2?.isEnabled = state.submitEnabled
          if(state.changePassMessage.isNotEmpty()){
              Snackbar.make(
