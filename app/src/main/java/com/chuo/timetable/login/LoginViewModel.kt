@@ -48,6 +48,7 @@ constructor(firebaseRepository: FirebaseRepository,
             firebaseRepository.observeTutors().collect { result: Result<List<Teacher>?>->
                 when{
                     result.isSuccess ->{
+                        viewState.progress = false
                         viewState.teachersLiveData = firebaseRepository.observeTeacherLiveData
                         updateUi()
                     }
@@ -62,6 +63,7 @@ constructor(firebaseRepository: FirebaseRepository,
     private fun changePassword(email: String){
     if(email.isEmpty()){
         viewState.errorMessage = "Fill Email field"
+        viewState.progress = false
         updateUi()
         return
     }

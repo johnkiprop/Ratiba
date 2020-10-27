@@ -3,91 +3,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="12">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_options"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayoutSelectDay"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_weight="10"
+                    android:id="@+id/constraint_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textInputLayoutSelectClass"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:startIconDrawable="@drawable/ic_calendar"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayoutSelectDay"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/day"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textInputLayoutSelectClass"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:startIconDrawable="@drawable/ic_calendar">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayoutSelectClass"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textInputLayoutSelectDay"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:startIconDrawable="@drawable/ic_class"
-                    >
+                        <AutoCompleteTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/day"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayoutSelectClass"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/darasa"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textInputLayoutSelectDay"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:startIconDrawable="@drawable/ic_class">
+
+                        <AutoCompleteTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/darasa"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
+                    <TextView
+                        android:id="@+id/scheduler_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/small"
+                        android:layout_marginTop="8dp"
+                        android:text="Scheduled Classes"
+                        android:textAppearance="@style/TextAppearance.Shopper.Title2"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSelectDay" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/scheduler_textview"
+                        app:layout_constraintVertical_bias="0.0" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/scheduler_textview"
-                android:text="Scheduled Classes"
-                android:layout_margin="@dimen/small"
-                android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.Shopper.Title2"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-        </RelativeLayout>
+            >
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
@@ -115,4 +118,5 @@
             </RelativeLayout>
         </com.google.android.material.bottomappbar.BottomAppBar>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 </layout>

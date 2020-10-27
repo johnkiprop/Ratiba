@@ -85,12 +85,13 @@ class FirebaseRepository
                 .get()
                 .await()
                 .data
-               if(result!!.containsValue(currentUser) ) {
-                   emit(Result.success(true))
-               }
-                else{
-                   emit(Result.success(false))
-               }
+            if (result != null) {
+                if(result.containsValue(currentUser) ) {
+                    emit(Result.success(true))
+                } else{
+                    emit(Result.success(false))
+                }
+            }
         }.catch {
                 emit(Result.failure(it))
             }

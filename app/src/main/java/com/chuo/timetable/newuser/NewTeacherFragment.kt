@@ -103,7 +103,7 @@ class NewTeacherFragment: BaseFragment<NewTeacherViewModel,NewTeacherViewState, 
                 Snackbar.LENGTH_SHORT
             ).show()
         }
-        if(state.progress){
+        if(state.progress && state.errorMessage.isEmpty()){
             viewModel.handleDoOnCreateUser(
                 binding?.textiputFirstname?.editText?.text.toString(),
                 binding?.textinputSecondname?.editText?.text.toString(),

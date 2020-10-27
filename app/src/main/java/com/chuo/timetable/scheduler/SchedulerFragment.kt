@@ -89,6 +89,7 @@ class SchedulerFragment : BaseFragment<SchedulerViewModel, SchedulerViewState, S
 
         }
 
+
     override fun updateUi(state: SchedulerViewState) {
         if(state.newFragment){
             screenNavigator.goToLogin()
