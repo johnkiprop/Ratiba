@@ -4,12 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chuo.timetable.login.LoginFragment
 import com.chuo.timetable.repository.FirebaseRepository
+import com.chuo.timetable.repository.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 abstract class BaseViewModel<S: ViewState>(
-    val firebaseRepository: FirebaseRepository,
+    val firebaseRepository: Repository,
     var viewState: S): ViewModel() {
     protected val stateLiveData = MutableLiveData<ViewState>()
     private val networkJob = Job()
@@ -32,7 +33,7 @@ abstract class BaseViewModel<S: ViewState>(
     }
 
     fun handleSignOut() {
-        firebaseRepository.auth.signOut()
+        firebaseRepository.auth()?.signOut()
         viewState.newFragment = true
         updateUi()
     }

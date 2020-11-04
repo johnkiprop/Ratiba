@@ -49,7 +49,7 @@ constructor(firebaseRepository: FirebaseRepository,
                 when{
                     result.isSuccess ->{
                         viewState.progress = false
-                        viewState.teachersLiveData = firebaseRepository.observeTeacherLiveData
+                        viewState.teachersLiveData = firebaseRepository.observeTeacherLiveData()
                         updateUi()
                     }
                     result.isFailure ->{

@@ -3,6 +3,7 @@ package com.chuo.timetable.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.chuo.timetable.coroutines.IODispatcher
+
 import com.chuo.timetable.model.Schedule
 import com.chuo.timetable.model.Teacher
 import com.chuo.timetable.model.TeacherMail
@@ -23,33 +24,72 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 @ExperimentalCoroutinesApi
-class FirebaseRepository
-@Inject constructor(@IODispatcher private val dispatcher: CoroutineDispatcher){
+@Singleton
+class FirebaseRepository @Inject constructor(@IODispatcher private val dispatcher: CoroutineDispatcher) : Repository{
 
-    val auth = FirebaseAuth.getInstance()
-    val firestore = Firebase.firestore
-    val repoLiveData = MutableLiveData<List<Schedule>>()
-    val teacherLiveData = MutableLiveData<List<Teacher>>()
-    val observeTeacherLiveData = MutableLiveData<List<Teacher>>()
-    lateinit var teacherMails: List<TeacherMail>
-    fun user(): FirebaseUser? = auth.currentUser
+    override fun auth() = FirebaseAuth.getInstance()
+    override fun firestore() = Firebase.firestore
+   override fun repoLiveData() = MutableLiveData<List<Schedule>>()
+    override fun teacherLiveData() = MutableLiveData<List<Teacher>>()
+    override fun observeTeacherLiveData() = MutableLiveData<List<Teacher>>()
+    override  fun teacherMails() = mutableListOf<TeacherMail>()
+    override fun user(): FirebaseUser? = auth().currentUser
 
-    fun registerTeacher(email: String): Flow<Result<AuthResult>> {
+    override fun observeSchedule(darasa: String,
+                                 day: String): Flow<Result<List<Schedule>?>> {
+        return callbackFlow{
+            val documentResult = firestore().collection("Timetable")
+                .document(darasa)
+                .collection(day)
+
+            val listener = documentResult.addSnapshotListener { messagesSnapshot, exception ->
+                exception?.let {
+                    cancel(it.message.toString())
+                }
+                val repo = messagesSnapshot?.documents?.map {
+                    Schedule(
+                        it["description"] as String?,
+                        it["startTime"] as String?,
+                        it["endTime"] as String?,
+                        it["eventName"] as String?,
+                        it["teacherMail"] as String?
+                    )
+
+                }
+
+                offer(Result.success(repo))
+
+                repo?.let {
+                    repoLiveData().postValue(repo)}
+
+            }
+            awaitClose {
+                listener.remove()
+                cancel()
+            }
+        }.catch {
+                emit(Result.failure(it))
+            }
+            .flowOn(dispatcher)
+    }
+
+    override fun registerTeacher(email: String): Flow<Result<AuthResult>> {
         return flow {
-            val result = auth.createUserWithEmailAndPassword(email, "placeHolder").await()
+            val result = auth().createUserWithEmailAndPassword(email, "placeHolder").await()
             emit(Result.success(result))
         }.catch {
                 emit(Result.failure(it))
             }
             .flowOn(dispatcher)
     }
-     fun loginTeacher(email: String, password: String): Flow<Result<AuthResult>>{
+    override fun loginTeacher(email: String, password: String): Flow<Result<AuthResult>>{
          return flow {
 
-             val result = auth.signInWithEmailAndPassword(email, password).await()
+             val result = auth().signInWithEmailAndPassword(email, password).await()
              emit(Result.success(result))
          }.catch {
                  emit(Result.failure(it))
@@ -58,9 +98,9 @@ class FirebaseRepository
      }
 
 
-    fun getTeachers():Flow<Result<List<Teacher>>>{
+    override fun getTeachers():Flow<Result<List<Teacher>>>{
         return  flow {
-            val snapShot = firestore.collection("Teachers")
+            val snapShot = firestore().collection("Teachers")
                 .get()
                 .await()
             val result = snapShot.documents.map {
@@ -69,7 +109,7 @@ class FirebaseRepository
                 )
             }
             result.let {
-                teacherLiveData.postValue(it) }
+                teacherLiveData().postValue(it) }
             emit(Result.success(result))
         }.catch {
                 emit(Result.failure(it))
@@ -77,10 +117,10 @@ class FirebaseRepository
             .flowOn(dispatcher)
     }
 
-    fun isAdmin() : Flow<Result<Boolean>>{
-        val currentUser = auth.currentUser?.uid
+    override fun isAdmin() : Flow<Result<Boolean>>{
+        val currentUser = auth().currentUser?.uid
         return  flow {
-            val result = firestore.collection("Timetable")
+            val result = firestore().collection("Timetable")
                 .document("Admin")
                 .get()
                 .await()
@@ -99,9 +139,9 @@ class FirebaseRepository
 
 
     }
-    fun addTeachersList(teacher: HashMap<String, String>): Flow<Result<DocumentReference>> {
+    override fun addTeachersList(teacher: HashMap<String, String>): Flow<Result<DocumentReference>> {
         return flow {
-            val result = firestore.collection("Teachers")
+            val result = firestore().collection("Teachers")
                 .add(teacher)
                 .await()
             emit(Result.success(result))
@@ -110,9 +150,9 @@ class FirebaseRepository
             }
             .flowOn(dispatcher)
     }
-    fun addTeachersMail(teacherMail: HashMap<String, String>): Flow<Result<DocumentReference>> {
+    override  fun addTeachersMail(teacherMail: HashMap<String, String>): Flow<Result<DocumentReference>> {
         return flow {
-            val result = firestore.collection("Mails")
+            val result = firestore().collection("Mails")
                 .add(teacherMail)
                 .await()
             emit(Result.success(result))
@@ -121,12 +161,12 @@ class FirebaseRepository
             }
             .flowOn(dispatcher)
     }
-    fun addAdmin(): Flow<Result<Void>> {
+    override fun addAdmin(): Flow<Result<Void>> {
         val userMap = hashMapOf(
             "id" to user()!!.uid
         )
         return flow {
-            val result = firestore.collection("Timetable")
+            val result = firestore().collection("Timetable")
                 .document("Admin")
                 .set(userMap)
                 .await()
@@ -138,49 +178,12 @@ class FirebaseRepository
     }
 
 
-   fun observeSchedule(darasa: String,
-                       day: String): Flow<Result<List<Schedule>?>> {
-      return callbackFlow{
-         val documentResult = firestore.collection("Timetable")
-              .document(darasa)
-              .collection(day)
-
-          val listener = documentResult.addSnapshotListener { messagesSnapshot, exception ->
-                  exception?.let {
-                      cancel(it.message.toString())
-                  }
-                  val repo = messagesSnapshot?.documents?.map {
-                          Schedule(
-                              it["description"] as String?,
-                              it["startTime"] as String?,
-                              it["endTime"] as String?,
-                              it["eventName"] as String?,
-                              it["teacherMail"] as String?
-                          )
-
-                  }
-
-                  offer(Result.success(repo))
-
-                  repo?.let {
-                      repoLiveData.postValue(repo)}
-
-              }
-             awaitClose {
-              listener.remove()
-              cancel()
-          }
-      }.catch {
-              emit(Result.failure(it))
-          }
-          .flowOn(dispatcher)
-   }
 
 
 
-    fun observeTutors(): Flow<Result<List<Teacher>?>> {
+    override fun observeTutors(): Flow<Result<List<Teacher>?>> {
         return callbackFlow{
-            val documentResult = firestore.collection("Teachers")
+            val documentResult = firestore().collection("Teachers")
 
             val listener = documentResult.addSnapshotListener { messagesSnapshot, exception ->
                 exception?.let {
@@ -194,7 +197,7 @@ class FirebaseRepository
                 offer(Result.success(repo))
 
                 repo?.let {
-                    observeTeacherLiveData.postValue(repo) }
+                    observeTeacherLiveData().postValue(repo) }
 
             }
             awaitClose {
@@ -206,9 +209,9 @@ class FirebaseRepository
             }
             .flowOn(dispatcher)
     }
-    fun observeTutorMail(): Flow<Result<List<TeacherMail>?>> {
+    override fun observeTutorMail(): Flow<Result<List<TeacherMail>?>> {
         return callbackFlow{
-            val documentResult = firestore.collection("Mails")
+            val documentResult = firestore().collection("Mails")
 
             val listener = documentResult.addSnapshotListener { messagesSnapshot, exception ->
                 exception?.let {
@@ -222,7 +225,7 @@ class FirebaseRepository
                 }
                 offer(Result.success(repo))
 
-                repo?.let { teacherMails = repo }
+                repo?.let { teacherMails().addAll(repo) }
 
             }
             awaitClose {
@@ -235,11 +238,11 @@ class FirebaseRepository
             .flowOn(dispatcher)
     }
 
-    fun updateSchedule(darasa: String,
+    override fun updateSchedule(darasa: String,
                        day: String,
                        item: HashMap<String, String>): Flow<Result<DocumentReference>>{
         return flow {
-            val result = firestore.collection("Timetable")
+            val result = firestore().collection("Timetable")
                 .document(darasa)
                 .collection(day)
                 .add(item)
@@ -251,9 +254,9 @@ class FirebaseRepository
             .flowOn(dispatcher)
 
     }
-    fun updateCalendar(item: HashMap<String, String>): Flow<Result<DocumentReference>>{
+    override fun updateCalendar(item: HashMap<String, String>): Flow<Result<DocumentReference>>{
         return flow {
-            val result = firestore.collection("Calendar")
+            val result = firestore().collection("Calendar")
                 .add(item)
                 .await()
             emit(Result.success(result))
@@ -263,9 +266,9 @@ class FirebaseRepository
             .flowOn(dispatcher)
 
     }
-    fun changePassword(email: String): Flow<Result<Task<Void>>> {
+    override fun changePassword(email: String): Flow<Result<Task<Void>>> {
         return flow {
-           val result = auth.sendPasswordResetEmail(email)
+           val result = auth().sendPasswordResetEmail(email)
             emit(Result.success(result))
         }.catch {
                 emit(Result.failure(it))

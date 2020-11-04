@@ -20,7 +20,7 @@ class DefaultScreenNavigator @Inject internal constructor() : ActivityLifecycleT
 
     private var fragmentManager: FragmentManager? = null
     override fun pop(): Boolean {
-        return fragmentManager != null && fragmentManager!!.popBackStackImmediate();
+        return fragmentManager != null && fragmentManager!!.popBackStackImmediate()
     }
     override fun goToTimetabler()  {
         if (fragmentManager != null) {

@@ -54,7 +54,7 @@ constructor(firebaseRepository: FirebaseRepository,
             flow.collect { result: Result<List<Teacher>> ->
                 when{
                     result.isSuccess->{
-                        viewState.teachersLiveData = firebaseRepository.teacherLiveData
+                        viewState.teachersLiveData = firebaseRepository.teacherLiveData()
                         updateUi()
                     }
                     result.isFailure->{
@@ -76,7 +76,7 @@ constructor(firebaseRepository: FirebaseRepository,
             flow.collect { result: Result<List<TeacherMail?>?> ->
                 when{
                     result.isSuccess->{
-                        viewState.teachersMailList = firebaseRepository.teacherMails
+                        viewState.teachersMailList = firebaseRepository.teacherMails()
                         updateUi()
                     }
                     result.isFailure->{

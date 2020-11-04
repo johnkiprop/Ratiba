@@ -20,7 +20,7 @@ import javax.inject.Inject
             Timber.plant(DebugTree())
         }
     }
-     protected fun initComponent(): ApplicationComponent? {
+     protected open fun initComponent(): ApplicationComponent? {
          return  DaggerApplicationComponent.builder()
              .applicationModule(ApplicationModule(this))
              .build()

@@ -4,10 +4,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.rules.TestRule
+import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class TestCoroutineRule : TestRule {
+class TestCoroutineRule : TestRule, TestWatcher() {
 
     @ExperimentalCoroutinesApi
     private val testCoroutineDispatcher = TestCoroutineDispatcher()
@@ -28,8 +29,13 @@ class TestCoroutineRule : TestRule {
         }
     }
 
+
     @ExperimentalCoroutinesApi
     fun runBlockingTest(block: suspend TestCoroutineScope.() -> Unit) =
         testCoroutineScope.runBlockingTest { block() }
 
+    override fun starting(description: Description?) {
+        super.starting(description)
+        Dispatchers.setMain(testCoroutineDispatcher)
+    }
 }

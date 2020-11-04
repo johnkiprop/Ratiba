@@ -6,6 +6,7 @@ import com.chuo.timetable.base.BaseViewModel
 import com.chuo.timetable.model.Schedule
 import com.chuo.timetable.model.Teacher
 import com.chuo.timetable.repository.FirebaseRepository
+import com.chuo.timetable.repository.Repository
 import com.chuo.timetable.viewmodel.AssistedSavedStateViewModelFactory
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -19,7 +20,7 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class SchedulerViewModel @AssistedInject
-constructor(firebaseRepository: FirebaseRepository,
+constructor(firebaseRepository: Repository,
             viewState: SchedulerViewState,
             @Assisted private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SchedulerViewState>(firebaseRepository, viewState) {
@@ -97,7 +98,7 @@ constructor(firebaseRepository: FirebaseRepository,
                 when{
                     result.isSuccess->{
                         viewState.listener = false
-                        viewState.itemsLiveData = firebaseRepository.repoLiveData
+                        viewState.itemsLiveData = firebaseRepository.repoLiveData()
                         updateUi()
                     }
                     result.isFailure->{

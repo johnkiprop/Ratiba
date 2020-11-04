@@ -46,7 +46,7 @@ class NewTeacherViewModel @AssistedInject
             firebaseRepository.observeTutors().collect { result: Result<List<Teacher>?>->
                 when{
                     result.isSuccess ->{
-                        viewState.teachersLiveData = firebaseRepository.observeTeacherLiveData
+                        viewState.teachersLiveData = firebaseRepository.observeTeacherLiveData()
                         viewState.progress = false
                         updateUi()
                     }
@@ -73,7 +73,7 @@ class NewTeacherViewModel @AssistedInject
                 when{
                     result.isSuccess->{
                         firebaseRepository.user()!!.sendEmailVerification()
-                        firebaseRepository.auth.sendPasswordResetEmail(username)
+                        firebaseRepository.auth()?.sendPasswordResetEmail(username)
                         viewState.progress = true
                         viewState.submitEnabled = true
                         updateUi()
